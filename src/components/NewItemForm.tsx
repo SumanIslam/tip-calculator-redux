@@ -1,39 +1,22 @@
 import { Box, Button, Input, Label } from '@twilio-paste/core';
-import { ChangeEvent, useState } from 'react';
-import { handleNumberField } from '../utils/utilities';
+import { useNewItemForm } from '../hooks/useNewItemForm';
+import { AddMenuItemAction, IItem } from '../store/items/types';
 
-export const NewItemForm = () => {
-	const [name, setName] = useState('');
-	const [price, setPrice] = useState(0);
-	const [quantity, setQuantity] = useState(0);
+type IProps = {
+	addMenuItem: (item: IItem) => AddMenuItemAction;
+};
 
-	const isValid = () => {
-		if (!name) return false;
-		if (price === null || price === undefined || price <= 0) return false;
-		if (quantity === null || quantity === undefined || quantity <= 0) return false;
-		return true;
-	};
-
-	const handlePrice = (e: ChangeEvent<HTMLInputElement>) => {
-		const price = parseInt(e.target.value);
-
-		handleNumberField(price, setPrice);
-	};
-	const handleQuantity = (e: ChangeEvent<HTMLInputElement>) => {
-		const quantity = parseInt(e.target.value);
-
-		handleNumberField(quantity, setQuantity);
-	};
-
-	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-
-		console.log(name, price, quantity)
-
-		setName('');
-		setPrice(0);
-		setQuantity(0);
-	};
+export const NewItemForm = ({ addMenuItem }: IProps) => {
+	const {
+		name,
+		price,
+		quantity,
+		setName,
+		handlePrice,
+		handleQuantity,
+		handleSubmit,
+		isValid,
+	} = useNewItemForm(addMenuItem);
 
 	return (
 		<Box marginBottom='space80'>
