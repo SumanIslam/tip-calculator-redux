@@ -1,13 +1,12 @@
 import { Box, Label, Option, Select } from '@twilio-paste/core';
-import type { IUpdateTipPercentageAction } from '../store/tip-percentage/types'
+import type { IUpdateTipPercentageAction } from '../store/tip-percentage/types';
 
-export const TipSelect = ({
-	tipPercentage,
-	updateTip,
-}: {
+interface IProps {
 	tipPercentage: number;
-	updateTip(tip: number): IUpdateTipPercentageAction;
-}) => {
+	updateTip: (tip: number) => IUpdateTipPercentageAction;
+}
+
+export const TipSelect = ({ tipPercentage, updateTip }: IProps) => {
 	return (
 		<Box marginY='space80'>
 			<Label htmlFor='tip-amount'>How much would you like to tip?</Label>

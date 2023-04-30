@@ -12,6 +12,8 @@ export const reducer = (state = initialItems, action: IMenuItemAction) => {
 	switch(action.type) {
 		case ADD_MENU_ITEM:
 			return [ action.payload, ...state]
+		case REMOVE_MENU_ITEM:
+			return state.filter(item => item.id !== action.payload)
 		default:
 			return state;
 	}

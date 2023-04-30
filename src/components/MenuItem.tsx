@@ -7,25 +7,27 @@ import {
 	Input,
 	Label,
 } from '@twilio-paste/core';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { removeMenuItem } from '../store/items/actions';
 
 import { useState, useEffect } from 'react';
 
 import { toCurrency } from '../utils/utilities';
-import { IItem } from '../store/items/types'
+import { IItem, RemoveMenuItemAction } from '../store/items/types';
 
-export const MenuItem = ({
-	id,
-	name,
-	price,
-	quantity,
-}: IItem) => {
-	const [, setPrice] = useState(price);
-	const [, setQuantity] = useState(quantity);
+interface IProps extends IItem {
+	removeMenuItem: (id: string) => RemoveMenuItemAction;
+}
+
+export const MenuItem = ({ id, name, price, quantity, removeMenuItem }: IProps) => {
+	const [, setPrice] = useState<number>();
+	const [, setQuantity] = useState<number>();
 
 	useEffect(() => {
 		setPrice(price);
-		setQuantity(quantity)
-	}, [price, quantity])
+		setQuantity(quantity);
+	}, [price, quantity]);
 
 	return (
 		<Card paddingTop='space40'>
@@ -53,12 +55,18 @@ export const MenuItem = ({
 					/>
 				</Box>
 				<Box padding='space20' textAlign='right' width='100%'>
-					<Heading as="h2" variant='heading50'>Total</Heading>
+					<Heading as='h2' variant='heading50'>
+						Total
+					</Heading>
 					{toCurrency(price * quantity)}
 				</Box>
 			</Flex>
 			<Box width='100%' textAlign='right'>
-				<Button variant='destructive_secondary' size='small'>
+				<Button
+					variant='destructive_secondary'
+					size='small'
+					onClick={() => removeMenuItem(id)}
+				>
 					Remove
 				</Button>
 			</Box>
@@ -66,4 +74,10 @@ export const MenuItem = ({
 	);
 };
 
-export default MenuItem;
+const mapDispatchToProps = (dispatch: Dispatch) => {
+	return {
+		removeMenuItem: (id: string) => dispatch(removeMenuItem(id))
+	}
+};
+
+export default connect(null, mapDispatchToProps)(MenuItem);
